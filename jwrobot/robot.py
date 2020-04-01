@@ -5,17 +5,17 @@ import requests
 from bs4 import BeautifulSoup
 from jwrobot import RSAJS
 from jwrobot.hex2b64 import HB64
-class robot(object):
+class Robot(object):
     def __init__(self, baseUrl, username, password):
         self.baseUrl = baseUrl
-        self.username = username
-        self.password = password
-        self.nowTime = int(time.time())
-        self.req = requests.session()
-        self.modulus = None
-        self.exponent = None
+        self.__username = username
+        self.__password = password
+        self.__req = requests.session()
+        self.__modulus = None
+        self.__exponent = None
         self.__isLogin = False      #登录状态
         self.__indexCode = ''       #主页HTML代码
+        self.nowTime = int(time.time())
         self.useVpn = False         #是否使用vpn
         self.header = {
             "User-Agent" : "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.86 Safari/537.36",
@@ -28,43 +28,40 @@ class robot(object):
             "Upgrade-Insecure-Requests": "1",
         }
         self.csrfToken = None
-    def RSAkey(self):
-        #根据公匙加密密码
+    #根据公匙加密密码
+    def __RSAkey(self):
         rsaKey = RSAJS.RSAKey()
-        rsaKey.setPublic(HB64().b642hex(self.modulus),HB64().b642hex(self.exponent))
-        return HB64().hex2b64(rsaKey.encrypt(self.password))
-    def getPublicKey(self):
-        #得到RSA加密公匙
+        rsaKey.setPublic(HB64().b642hex(self.__modulus),HB64().b642hex(self.__exponent))
+        return HB64().hex2b64(rsaKey.encrypt(self.__password))
+    #得到RSA加密公匙
+    def _getPublicKey(self):
         _path = '/jwglxt'
         modulusPath = self.baseUrl + _path + '/xtgl/login_getPublicKey.html?time=' + str(self.nowTime)
-        backJson = json.loads(self.req.get(modulusPath).text)
-        self.modulus = backJson['modulus']
-        self.exponent = backJson['exponent']
-    def getCSRFToken(self):
-        #得到隐藏域表单数据(CSRFToken)
-        rep = self.req.get(self.baseUrl + '/jwglxt/xtgl/login_slogin.html?language=zh_CN&_t=' + str(self.nowTime))
+        backJson = json.loads(self.__req.get(modulusPath).text)
+        self.__modulus = backJson['modulus']
+        self.__exponent = backJson['exponent']
+    #得到隐藏域表单数据(CSRFToken)
+    def _getCSRFToken(self):
+        rep = self.__req.get(self.baseUrl + '/jwglxt/xtgl/login_slogin.html?language=zh_CN&_t=' + str(self.nowTime))
         csrfPattern = '<input type="hidden" id="csrftoken" name="csrftoken" value="(.*?)"/>'
         self.csrfToken = re.findall(csrfPattern, rep.text)
         if len(self.csrfToken) >= 1:
             self.csrfToken = self.csrfToken[0]
+    # 登陆
     def login(self):
         if self.__isLogin:
             return True
         #模拟用户登录
-        self.getCSRFToken()
-        self.getPublicKey()
-        # print("%s : %s : %s\n" % (self.csrfToken, self.modulus, self.exponent))
-        enpassword = self.RSAkey()
+        self._getCSRFToken()
+        self._getPublicKey()
+        enpassword = self.__RSAkey()
         #需要发送的表单数据
         data = {
-            'yhm' : self.username,
+            'yhm' : self.__username,
             'mm' : enpassword,
             'csrftoken' : self.csrfToken
         }
-        rep = self.req.post(self.baseUrl + '/jwglxt/xtgl/login_slogin.html', data = data, headers = self.header)
-        # print(rep.text)
-        print(rep.url)
-        # print(self.req.cookies)
+        rep = self.__req.post(self.baseUrl + '/jwglxt/xtgl/login_slogin.html', data = data, headers = self.header)
         if rep.url == self.baseUrl + '/jwglxt/xtgl/index_initMenu.html':
             self.__isLogin = True
             self.__indexCode = rep.text
@@ -73,30 +70,46 @@ class robot(object):
             self.getUserInfo()
         else:
             self.__isLogin = False
-            print('登录失败，用户名或者密码错误！')
-    def getUserInfo(self):
-        #得到当前登录用户的信息
-        if not self.__isLogin:
-            return
-        apiUrl = '/jwglxt/xtgl/index_cxYhxxIndex.html?xt=jw&localeKey=zh_CN&_=' + str(self.nowTime) + '&gnmkdm=index&su=' + self.username
-        rep = self.req.get(self.baseUrl + apiUrl)
-        BS = BeautifulSoup(rep.text, 'html.parser')
-        name = BS.select_one('.media-body>h4').text                 #得到姓名
-        classInfo = BS.select_one('.media-body>p').text             #得到年级班级信息
-        headImgUrl = BS.select_one('.media-object').attrs['src']    #得到照片的URL
-        if __name__ == '__main__':
-            print(name)
-            print(classInfo)
-        return {
-            'name' : name,
-            'classInfo' : classInfo,
-            'headImgInfo' : headImgUrl
+            if __name__ == '__main__':
+                print('登录失败，用户名或者密码错误！')
+    #获取是否登录
+    def isLogin(self):
+        return self.__isLogin
+    # VPN登陆
+    def vpnLogin(self, username, password):
+        if self.useVpn:
+            return True
+        vpnUrl = 'https://w.buct.edu.cn/users/sign_in'
+        indexBack = self.__req.get(vpnUrl, headers = self.header)
+        indexCode = indexBack.text
+        csrfParamPattern = '<meta name="csrf-param" content="(.*?)" />'
+        csrfParam = re.findall(csrfParamPattern, indexCode)
+        if len(csrfParam) >= 1:
+            csrfParam = csrfParam[0]
+        csrfTokenPattern = '<meta name="csrf-token" content="(.*?)" />'
+        csrfValue = re.findall(csrfTokenPattern, indexCode)
+        if len(csrfValue) >= 1:
+            csrfValue = csrfValue[0]
+        data = {
+            'user[login]' : username,
+            'user[password]' : password,
+            'user[dymatice_code]' : 'unknown',
+            'commit' : '登录 Login'
         }
+        data[csrfParam] = csrfValue
+        login = self.__req.post(vpnUrl, data = data, headers = self.header)
+        searchLoginStatus = '<li><a rel="nofollow" data-method="delete" href="/users/sign_out">退出登录</a></li>'
+        if searchLoginStatus in login.text:
+            self.useVpn = True
+            return True
+        else:
+            return False
+
+    #得到成绩信息
     def getGrade(self, xnm, xqm):
-        #得到该学生的成绩信息
         if not self.__isLogin:
             return None
-        gradeUrl = self.baseUrl + '/jwglxt/cjcx/cjcx_cxDgXscj.html?gnmkdm=N305005&layout=default&su=' + self.username
+        gradeUrl = self.baseUrl + '/jwglxt/cjcx/cjcx_cxDgXscj.html?gnmkdm=N305005&layout=default&su=' + self.__username
         xqm = [3, 12, 16][int(xqm) - 1]
         datas = {
             'xnm' : xnm,
@@ -116,7 +129,7 @@ class robot(object):
         head['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
         if 'Upgrade-Insecure-Requests' in head:
             head.pop('Upgrade-Insecure-Requests')
-        rep = self.req.post(self.baseUrl + '/jwglxt/cjcx/cjcx_cxDgXscj.html?doType=query&gnmkdm=N305005', data = datas, headers = head)
+        rep = self.__req.post(self.baseUrl + '/jwglxt/cjcx/cjcx_cxDgXscj.html?doType=query&gnmkdm=N305005', data = datas, headers = head)
         if __name__ == "__main__":
             num = 1
             gradeJSON = json.loads(rep.text)
@@ -124,41 +137,29 @@ class robot(object):
                 print('第%d门课: %s\n班级: %s;\n成绩: %s ;\n绩点 : %s ;\n\n\n' % (num, i['kcmc'], i['bj'], i['cj'], i['jd']))
                 num += 1
         return json.loads(rep.text)
-    def isLogin(self):
-        #供外界调用获取是否登录
-        return self.__isLogin
 
-    def vpnLogin(self, username, password):
-        if self.useVpn:
-            return True
-        vpnUrl = 'https://w.buct.edu.cn/users/sign_in'
-        indexBack = self.req.get(vpnUrl, headers = self.header)
-        # print(indexBack.text)
-        indexCode = indexBack.text
-        csrfParamPattern = '<meta name="csrf-param" content="(.*?)" />'
-        csrfParam = re.findall(csrfParamPattern, indexCode)
-        if len(csrfParam) >= 1:
-            csrfParam = csrfParam[0]
-        csrfTokenPattern = '<meta name="csrf-token" content="(.*?)" />'
-        csrfValue = re.findall(csrfTokenPattern, indexCode)
-        if len(csrfValue) >= 1:
-            csrfValue = csrfValue[0]
-        data = {
-            'user[login]' : username,
-            'user[password]' : password,
-            'user[dymatice_code]' : 'unknown',
-            'commit' : '登录 Login'
+    #得到登录用户的信息
+    def getUserInfo(self):
+        if not self.__isLogin:
+            return
+        apiUrl = '/jwglxt/xtgl/index_cxYhxxIndex.html?xt=jw&localeKey=zh_CN&_=' + str(self.nowTime) + '&gnmkdm=index&su=' + self.__username
+        rep = self.__req.get(self.baseUrl + apiUrl)
+        BS = BeautifulSoup(rep.text, 'html.parser')
+        name = BS.select_one('.media-body>h4').text                 #得到姓名
+        classInfo = BS.select_one('.media-body>p').text             #得到年级班级信息
+        headImgUrl = BS.select_one('.media-object').attrs['src']    #得到照片的URL
+        if __name__ == '__main__':
+            print(name)
+            print(classInfo)
+        return {
+            'name' : name,
+            'classInfo' : classInfo,
+            'headImgInfo' : headImgUrl
         }
-        data[csrfParam] = csrfValue
-        login = self.req.post(vpnUrl, data = data, headers = self.header)
-        # print(login.text)
-        searchLoginStatus = '<li><a rel="nofollow" data-method="delete" href="/users/sign_out">退出登录</a></li>'
-        if searchLoginStatus in login.text:
-            self.useVpn = True
-            return True
-        else:
-            return False
+    # 得到课表
+    def getClassTable(self, xnm, xqm):
+        xnm = int(xnm)
+        xqm = int(xqm)
 
 if __name__ == "__main__":
-    a = robot("http://jwglxt.w.buct.edu.cn", "2018040532", "dazw2000123")
-    a.vpnLogin("2018040532", "dazw2000123")
+    None

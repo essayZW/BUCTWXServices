@@ -1,1 +1,1 @@
-from jwrobot.robot import robot
+from jwrobot.robot import Robot
