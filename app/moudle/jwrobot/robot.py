@@ -3,8 +3,8 @@ import time
 import json
 import requests
 from bs4 import BeautifulSoup
-from jwrobot import RSAJS
-from jwrobot.hex2b64 import HB64
+from . import RSAJS
+from .hex2b64 import HB64
 class Robot(object):
     def __init__(self, baseUrl, username, password):
         self.baseUrl = baseUrl
