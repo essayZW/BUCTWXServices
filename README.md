@@ -171,7 +171,7 @@
 
 ### 查询学年学期成绩
 
-URL: `/iw/getAllGrade`
+URL: `/w/getAllGrade`
 
 Method: **POST**
 
