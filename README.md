@@ -148,8 +148,18 @@
    app/__pycache__/
    app/**/__pycache__/
    ```
-
    
+7. API返回数据的大概格式
+   
+   ```json
+   {
+       'status' : True, // 此次请求是否成功
+       'info'   : ''    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+       'date'	 : ''	 // 所请求的数据，没有则为空
+   }
+   ```
+   
+   以上三项是必须的，可以适当增加，但是必须要在文档说明
 #  教务管理系统
 
 ## 成绩查询
@@ -167,12 +177,28 @@ Method: **POST**
 
 Params: 
 
-| 参数名 | 类型 |   说明   |
-| :----: | :--: | :------: |
-|  xnm   | int  | 学年编号 |
-|  xqm   | int  | 学期编号 |
+|   参数名    |  类型  |         说明         |
+| :---------: | :----: | :------------------: |
+|     xnm     |  int   |       学年编号       |
+|     xqm     |  int   |       学期编号       |
+|  username   | string |      教务用户名      |
+|  password   | string |       教务密码       |
+| vpnusername | string | w.buct.edu.cn 用户名 |
+| vpnpassword | string | w.buct.edu.cn  密码  |
 
-Response: **JSON**格式数据，在这里直接返回爬虫爬的数据即可
+Response Type: **JSON**
+
+Response Date:
+
+```json
+{
+    'status' : True, // 此次请求是否成功
+    'info'   : ''    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+    'date'	 : ''	 // 所请求的数据，没有则为空
+}
+```
+
+
 
 ### 查询指定科目成绩
 
@@ -187,6 +213,20 @@ Params:
 |  xnm   |              int               | 学年编号 |
 |  xqm   |              int               | 学期编号 |
 | classm | **未知(根据具体爬虫所需调整)** |   课程   |
+| username | string |      教务用户名      |
+| password | string |       教务密码       |
+| vpnusername | string | w.buct.edu.cn 用户名 |
+| vpnpassword | string | w.buct.edu.cn  密码  |
 
-Response: **JSON**格式数据，在这里直接返回爬虫爬的数据即可
+Response Type: **JSON**
+
+Response Date:
+
+```json
+{
+    'status' : True, // 此次请求是否成功
+    'info'   : ''    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+    'date'	 : ''	 // 所请求的数据，没有则为空
+}
+```
 
