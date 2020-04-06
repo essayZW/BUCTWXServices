@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 # app/module/__init__.py
 
 

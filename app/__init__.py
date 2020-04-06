@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 # app/__init__.py
 # 引入flask
 from flask import Flask

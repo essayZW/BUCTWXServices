@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 import time
 import json
 from app import App, view, AppCofig, encrypt

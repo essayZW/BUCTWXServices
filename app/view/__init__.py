@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 # app/view/__init__.py
 
 # 测试代码开始
