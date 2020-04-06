@@ -9,5 +9,3 @@ from . import test
 
 # 教务相关的视图
 from . import jw
-# 错误处理相关的视图
-from . import error
