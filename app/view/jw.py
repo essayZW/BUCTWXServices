@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 from flask import Blueprint
 # 引入教务爬虫
 from ..moudle.jwrobot import Robot

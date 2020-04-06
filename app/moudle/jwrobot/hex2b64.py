@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 class HB64(object):
 
     b64byte = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
