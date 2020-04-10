@@ -1,4 +1,5 @@
 # BUCTWXServices
+
 为参加BUCT小程序比赛的后端项目
 
 # 注意事项
@@ -230,3 +231,33 @@ Response Date:
 }
 ```
 
+## 查询学生基本信息
+
+该项目包含一个API，查询学生的姓名，以及班级
+
+### 查询信息
+
+URL: `/jw/getStuInfo`
+
+Method: **POST**
+
+Params: 
+
+| 参数名 |              类型              |   说明   |
+| :----: | :----------------------------: | :------: |
+| username | string |      教务用户名      |
+| password | string |       教务密码       |
+| vpnusername | string | w.buct.edu.cn 用户名 |
+| vpnpassword | string | w.buct.edu.cn  密码  |
+
+Response Type: **JSON**
+
+Response Date:
+
+```json
+{
+    'status' : True, // 此次请求是否成功
+    'info'   : ''    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+    'data'	 : ''	 // 所请求的数据，没有则为空
+}
+```
