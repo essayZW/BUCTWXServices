@@ -47,7 +47,10 @@ def getAllGrade():
     passWord = request.form.get('password')
     vpnUserName = request.form.get('vpnusername')
     vpnPassWord = request.form.get('vpnpassword')
-    if not userName or not passWord or not vpnUserName or not vpnPassWord:
+
+    xnm = request.form.get('xnm')
+    xqm = request.form.get('xqm')
+    if not userName or not passWord or not vpnUserName or not vpnPassWord or not xnm or not xqm:
         res['info'] = '缺少参数'
         return json.dumps(res)
     robot = Robot('https://jwglxt.w.buct.edu.cn', userName, passWord)
@@ -60,9 +63,6 @@ def getAllGrade():
         res['info'] = '用户名或者密码错误'
         return json.dumps(res)
     
-    xnm = request.form.get('xnm')
-    xqm = request.form.get('xqm')
-    xqm = [3, 12, 16][int(xqm) - 1]
 
     allGrade = robot.getGrade(xnm,xqm)
     res['status'] = True
@@ -72,3 +72,4 @@ def getAllGrade():
 
 @jwBlueprint.route('/getDetailScore',methods = ['POST'])
 def getDetailScore():
+    None
