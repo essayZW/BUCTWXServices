@@ -138,7 +138,14 @@ class Robot(object):
                 print('第%d门课: %s\n班级: %s;\n成绩: %s ;\n绩点 : %s ;\n\n\n' % (num, i['kcmc'], i['bj'], i['cj'], i['jd']))
                 num += 1
         return json.loads(rep.text)
-
+    
+    #得到单科成绩信息
+    def getScore(self, xnm, xqm, classm):
+        xnm = int(xnm)
+        xqm = int(xqm)
+        classm = str(classm)
+        return True
+     
     #得到登录用户的信息
     def getUserInfo(self):
         if not self.__isLogin:
