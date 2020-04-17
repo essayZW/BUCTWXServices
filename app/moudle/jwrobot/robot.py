@@ -168,6 +168,55 @@ class Robot(object):
     def getClassTable(self, xnm, xqm):
         xnm = int(xnm)
         xqm = int(xqm)
+        """获取课程表信息"""
+        if not self.__isLogin:
+            return None
+        classTableUrl = self.baseUrl + '/jwglxt/kbcx/xskbcx_cxXskbcxIndex.html?gnmkdm=N2151&layout=default&su=' + self.__username
+        xqm = [3, 12, 16][int(xqm) - 1]
+        datas = {
+            'xnm' : xnm,
+            'xqm' : xqm,
+            '_search' : False,
+            'nd' : self.nowTime,
+            'queryModel.showCount' : 15,
+            'queryModel.currentPage' : 1,
+            'queryModel.sortName' : ' ',
+            'queryModel.sortOrder' : 'asc',
+            'time' : 1
+        }
+        head = self.header
+        head['X-Requested-With'] = 'XMLHttpRequest'
+        head['Referer'] = classTableUrl
+        head['Accept'] = 'application/json, text/javascript, */*; q=0.01'
+        head['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+        if 'Upgrade-Insecure-Requests' in head:
+            head.pop('Upgrade-Insecure-Requests')
+        rep = requests.post(self.baseUrl + '/jwglxt/xssygl/sykbcx_cxSykbcxxsIndex.html?doType=query&gnmkdm=N2151', data = datas, headers = head)
+        jres = rep.json()
+        res_dict = {
+            """
+            xsxx:学生信息
+            """
+            'name': jres['xsxx']['XM'],
+            'studentId': jres['xsxx']['XH'],
+            'schoolYear': jres['xsxx']['XNM'],
+            'schoolTerm': jres['xsxx']['XQMMC'],
+            'normalCourse': [{
+                'courseTitle': i['kcmc'],
+                'courseTime': i['sksj'],
+                'campus': i['xqmc'],
+                'courseAddress': i['skdd'],
+                'teacher': i['xm'],
+                'courseId': i['kch_id'],
+                'inspectionForm': i['kcxs'],
+                'courseNotes': i['bz'],
+                'hoursComposition': i['kcxszc'],
+                'weeklyHours': i['zhxs'],
+                'totalHours': i['zxs'],
+                'credit': i['xf']                  
+            } for i in jres['kbList']],
+            'otherCourses': [i['qtkcgs'] for i in jres['sjkList']]}
+        return res_dict
 
 if __name__ == "__main__":
     None
