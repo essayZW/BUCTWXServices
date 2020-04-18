@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- encoding: utf8 -*-
 import re
 import time
 import json

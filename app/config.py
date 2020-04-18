@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- encoding: utf8 -*-
 import random
 # 配置文件
 AppCofig = {

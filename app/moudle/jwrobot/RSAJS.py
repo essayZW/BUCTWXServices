@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- encoding: utf8 -*-
 """
 from  https://github.com/Pusnow/pyjsbn-rsa
 

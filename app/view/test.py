@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- encoding: utf8 -*-
 # 引入蓝图功能
 from flask import Blueprint
 

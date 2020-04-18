@@ -1,4 +1,4 @@
-# -*- coding: utf8 -*-
+# -*- encoding: utf8 -*-
 # app/model/__init__.py
 
 '''
