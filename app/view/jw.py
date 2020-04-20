@@ -5,6 +5,10 @@ from ..moudle.jwrobot import Robot
 # 创建教务蓝图
 jwBlueprint = Blueprint('jw', __name__)
 
+# 得到用户的信息
+def getUserInfo(robot):
+    return robot.getUserInfo()
+
 @jwBlueprint.route('/getStuInfo', methods = ['POST'])
 def getStuInfo():
     res = {
@@ -68,6 +72,7 @@ def getAllGrade():
     res['status'] = True
     res['data'] = allGrade
     res['info'] = 'success'
+    res['sinfo'] = getUserInfo(robot)
     return json.dumps(res)
 
 @jwBlueprint.route('/getSingleGrade',methods = ['POST'])
