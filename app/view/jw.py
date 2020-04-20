@@ -110,3 +110,36 @@ def getSingleGrade():
     res['data'] = detailScore
     res['info'] = 'success'
     return json.dumps(res)
+
+@jwBlueprint.route('/getSchedule',mothods = ['POST'])
+def getSchedule():
+    res = {
+        'status' : False,
+        'info' : '',
+        'data' : None
+    }
+    
+    userName = request.form.get('username')
+    passWord = request.form.get('password')
+    vpnUserName = request.form.get('vpnusername')
+    vpnPassWord = request.form.get('vpnpassword')
+    xnm = request.form.get('xnm')
+    xqm = request.form.get('xqm')
+    if not userName or not passWord or not vpnUserName or not vpnPassWord or not xnm or not xqm:
+        res['info'] = '缺少参数'
+        return json.dumps(res)
+    robot = Robot('https://jwglxt.w.buct.edu.cn', userName, passWord)
+    vpnlogon = robot.vpnLogin(vpnUserName, vpnPassWord)
+    if not vpnlogon:
+        res['info'] = 'VPN用户名或者密码错误'
+        return json.dumps(res)
+    robot.login()
+    if not robot.isLogin():
+        res['info'] = '用户名或者密码错误'
+        return json.dumps(res)
+    
+    schedule = robot.getClassTable(xnm,xqm)
+    res['status'] = True
+    res['data'] = schedule
+    res['info'] = 'success'
+    return json.dumps(res)
