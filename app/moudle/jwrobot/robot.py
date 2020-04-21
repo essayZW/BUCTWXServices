@@ -118,7 +118,7 @@ class Robot(object):
             'xqm' : xqm,
             '_search' : False,
             'nd' : self.nowTime,
-            'queryModel.showCount' : 15,
+            'queryModel.showCount' : 30,
             'queryModel.currentPage' : 1,
             'queryModel.sortName' : ' ',
             'queryModel.sortOrder' : 'asc',
@@ -145,7 +145,38 @@ class Robot(object):
         xnm = int(xnm)
         xqm = int(xqm)
         classm = str(classm)
-        return True
+        # 先查询该学期的所有成绩
+        allGrade = self.getGrade(xnm, xqm)
+        xqm = [3, 12, 16][int(xqm) - 1]
+        apiAddress = '/jwglxt/cjcx/cjcx_cxCjxq.html?gnmkdm=N305005&time=' + str(self.nowTime)
+        jxbid = False
+        # 获得教学班ID
+        for i in allGrade['items']:
+            if i['kcmc'] == classm:
+                jxbid = i['jxb_id']
+                break
+        if not jxbid:
+            return []
+        # 发送请求
+        datas = {
+            'xnm' : xnm,
+            'xqm' : xqm,
+            'kcmc' : classm,
+            'jxb_id' : jxbid
+        }
+        singleGrade = self.__req.post(self.baseUrl + apiAddress, data = datas, headers = self.header, verify= False)
+        # 解析URL
+        BS = BeautifulSoup(singleGrade.text, 'html.parser')
+        tableArea = BS.select_one('tbody')
+        trs = tableArea.select('tr')
+        res = []
+        for i in trs:
+            tds = i.select('td')
+            temp = []
+            for j in tds:
+                temp.append(j.string.replace('&nbsp;', '').replace('\xa0', '').replace('【', '').replace('】', '').replace(' ', ''))
+            res.append(temp)
+        return res
      
     #得到登录用户的信息
     def getUserInfo(self):

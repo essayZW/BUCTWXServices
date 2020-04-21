@@ -214,7 +214,7 @@ Params:
 | :----: | :----------------------------: | :------: |
 |  xnm   |              int               | 学年编号 |
 |  xqm   |              int               | 学期编号 |
-| classm | **未知(根据具体爬虫所需调整)** |   课程   |
+| classm | string |   课程名称(中文)   |
 | username | string |      教务用户名      |
 | password | string |       教务密码       |
 | vpnusername | string | w.buct.edu.cn 用户名 |
