@@ -108,7 +108,7 @@ def getSingleGrade():
     res['info'] = 'success'
     return json.dumps(res)
 
-@jwBlueprint.route('/getSchedule',mothods = ['POST'])
+@jwBlueprint.route('/getSchedule',methods = ['POST'])
 def getSchedule():
     res = {
         'status' : False,
