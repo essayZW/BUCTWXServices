@@ -4,8 +4,12 @@ import time
 import json
 import requests
 from bs4 import BeautifulSoup
-from . import RSAJS
-from .hex2b64 import HB64
+if __name__ == '__main__':
+    import RSAJS
+    from hex2b64 import HB64
+else:
+    from . import RSAJS
+    from .hex2b64 import HB64
 requests.packages.urllib3.disable_warnings()
 class Robot(object):
     def __init__(self, baseUrl, username, password):
