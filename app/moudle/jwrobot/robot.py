@@ -200,14 +200,13 @@ class Robot(object):
             'classInfo' : classInfo,
             'headImgInfo' : headImgUrl
         }
+
+
     # 得到课表
     def getClassTable(self, xnm, xqm):
-        xnm = int(xnm)
-        xqm = int(xqm)
-        """获取课程表信息"""
         if not self.__isLogin:
             return None
-        classTableUrl = self.baseUrl + '/jwglxt/kbcx/xskbcx_cxXskbcxIndex.html?gnmkdm=N2151&layout=default&su=' + self.__username
+        classTableUrl = self.baseUrl + '/jwglxt/kbcx/xskbcx_cxXskb.html?gnmkdm=N2151&layout=default&su=' + self.__username
         xqm = [3, 12, 16][int(xqm) - 1]
         datas = {
             'xnm' : xnm,
@@ -227,32 +226,53 @@ class Robot(object):
         head['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
         if 'Upgrade-Insecure-Requests' in head:
             head.pop('Upgrade-Insecure-Requests')
-        rep = requests.post(self.baseUrl + '/jwglxt/xssygl/sykbcx_cxSykbcxxsIndex.html?doType=query&gnmkdm=N2151', data = datas, headers = head)
-        jres = rep.json()
-        res_dict = {
-            """
-            xsxx:学生信息
-            """
-            'name': jres['xsxx']['XM'],
-            'studentId': jres['xsxx']['XH'],
-            'schoolYear': jres['xsxx']['XNM'],
-            'schoolTerm': jres['xsxx']['XQMMC'],
-            'normalCourse': [{
-                'courseTitle': i['kcmc'],
-                'courseTime': i['sksj'],
-                'campus': i['xqmc'],
-                'courseAddress': i['skdd'],
-                'teacher': i['xm'],
-                'courseId': i['kch_id'],
-                'inspectionForm': i['kcxs'],
-                'courseNotes': i['bz'],
-                'hoursComposition': i['kcxszc'],
-                'weeklyHours': i['zhxs'],
-                'totalHours': i['zxs'],
-                'credit': i['xf']                  
-            } for i in jres['kbList']],
-            'otherCourses': [i['qtkcgs'] for i in jres['sjkList']]}
-        return res_dict
+        rep = self.__req.post(self.baseUrl+'/jwglxt/kbcx/xskbcx_cxXsKb.html?gnmkdm=N2151', data = datas, headers = head, verify = False)
+        return json.loads(rep.text)        
+
+    # 得到考试信息
+    def getExamInfo(self, xnm, xqm):
+        ksmcList = ['8E569BD0DA474BB8E053839D04CA7EAC', '93440BDCB2A3FBD6E053B39AC379A13C', '9589DCFE12BBDCD2E053B39AC3793C77', '8D26239B56E2C2C0E053839D04CA77D7','922B28A14A0EDD81E053B39AC3796812']
+        """
+        '8E569BD0DA474BB8E053839D04CA7EAC' #补考
+        '93440BDCB2A3FBD6E053B39AC379A13C' #单开班重修期末考试
+        '9589DCFE12BBDCD2E053B39AC3793C77' #考查课期末考试
+        '8D26239B56E2C2C0E053839D04CA77D7' #期末考试
+        '922B28A14A0EDD81E053B39AC3796812' #期中考试
+        """
+        if not self.__isLogin:
+            return None
+        examInfoUrl = self.baseUrl + '/jwglxt/kwgl/kscx_cxXsksxxIndex.html?gnmkdm=N358105&layout=default&su=' + self.__username
+        xqm = [3, 12, 16][int(xqm) - 1]
+        datas = {
+            'xnm' : xnm,
+            'xqm' : xqm,
+            'ksmcdmb_id' : '8D26239B56E2C2C0E053839D04CA77D7',
+            '_search' : False,
+            'nd' : self.nowTime,
+            'queryModel.showCount' : 30,
+            'queryModel.currentPage' : 1,
+            'queryModel.sortName' : ' ',
+            'queryModel.sortOrder' : 'asc',
+            'time' : 1
+        }
+        head = self.header
+        head['X-Requested-With'] = 'XMLHttpRequest'
+        head['Referer'] = examInfoUrl
+        head['Accept'] = 'application/json, text/javascript, */*; q=0.01'
+        head['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+        if 'Upgrade-Insecure-Requests' in head:
+            head.pop('Upgrade-Insecure-Requests')
+        ksxxList = []
+        for j in range(5):
+            datas['ksmcdmb_id']=ksmcList[j]
+            rep = self.__req.post(self.baseUrl + '/jwglxt/kwgl/kscx_cxXsksxxIndex.html?doType=query&gnmkdm=N358105', data = datas, headers = head, verify = False)
+            #print(json.loads(rep.text))
+            if __name__ == "__main__":
+                examInfoJSON = json.loads(rep.text)
+                for i in examInfoJSON['items']:
+                    ksxxList.append(i)
+                    print('考试名称：%s;\n课程名: %s;\n班级: %s;\n老师: %s ;\n时间 : %s ;\n地点 ：%s ;\n\n\n' % (i['ksmc'], i['kcmc'], i['bj'], i['jsxx'], i['kssj'], i['cdmc']))
+        return ksxxList
 
 if __name__ == "__main__":
     None
