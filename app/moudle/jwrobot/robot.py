@@ -111,6 +111,7 @@ class Robot(object):
         else:
             return False
 
+
     #得到成绩信息
     def getGrade(self, xnm, xqm):
         if not self.__isLogin:
@@ -273,6 +274,40 @@ class Robot(object):
                     ksxxList.append(i)
                     print('考试名称：%s;\n课程名: %s;\n班级: %s;\n老师: %s ;\n时间 : %s ;\n地点 ：%s ;\n\n\n' % (i['ksmc'], i['kcmc'], i['bj'], i['jsxx'], i['kssj'], i['cdmc']))
         return ksxxList
+    
+    #得到GPA
+    def getGPA(self):
+        if not self.__isLogin:
+            return None
+        gpaUrl = self.baseUrl + '/jwglxt/xsxy/xsxyqk_cxXsxyqkIndex.html?gnmkdm=N105515&layout=default&su=' + self.__username
+        rep = self.__req.get(gpaUrl, verify = False)
+        BS = BeautifulSoup(rep.text,'html.parser')
+        allFont = BS.select('#alertBox>font')
+        gpaFont = allFont[1].select_one('font').text
+        timeFont = allFont[0].text
+        timeCu = re.search('[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d', timeFont)
+        dict = {
+            'gpa' : gpaFont ,
+            'time': timeCu.group()
+        }
+        """
+        'gpa' : gpa
+        'time' : current time
+        """
+        head = self.header
+        head['X-Requested-With'] = 'XMLHttpRequest'
+        head['Referer'] = gpaUrl
+        head['Accept'] = 'application/json, text/javascript, */*; q=0.01'
+        head['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+        if 'Upgrade-Insecure-Requests' in head:
+            head.pop('Upgrade-Insecure-Requests')
+        print(dict)
+        #for value in dict.values():
+            #print(format(value))
+        return dict
+
+
+
 
 if __name__ == "__main__":
     None
