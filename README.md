@@ -263,3 +263,92 @@ Response Date:
 }
 ```
 
+### 查询GPA
+
+URL:`/jw/getGpa`
+
+Method:**POST**
+
+Params:
+
+|   参数名    |  类型  |         说明         |
+| :---------: | :----: | :------------------: |
+|  username   | string |      教务用户名      |
+|  password   | string |       教务密码       |
+| vpnusername | string | w.buct.edu.cn 用户名 |
+| vpnpassword | string | w.buct.edu.cn  密码  |
+
+Response Type: **JSON**
+
+Response Date:
+
+```json
+{
+    'status' : True, // 此次请求是否成功
+    'info'   : ''    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+    'data'	 : ''	 // 所请求的数据，没有则为空
+}
+```
+
+## 查询课表
+
+URL:`/jw/getSchedule`
+
+Method: **POST**
+
+Params:
+
+|   参数名    |  类型  |         说明         |
+| :---------: | :----: | :------------------: |
+|     xnm     |  int   |       学年编号       |
+|     xqm     |  int   |       学期编号       |
+|  username   | string |      教务用户名      |
+|  password   | string |       教务密码       |
+| vpnusername | string | w.buct.edu.cn 用户名 |
+| vpnpassword | string | w.buct.edu.cn  密码  |
+
+ResponseType:**JSON**
+
+Response Date:
+
+```json
+{
+    'status' : True, // 此次请求是否成功
+    'info'   : ''    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+    'data'	 : ''	 // 所请求的数据，没有则为空
+}
+```
+
+## 考试信息查询
+
+URL:`/jw/getExamInfo`
+
+Method: **POST**
+
+Params:
+
+|   参数名    |  类型  |         说明         |
+| :---------: | :----: | :------------------: |
+|     xnm     |  int   |       学年编号       |
+|     xqm     |  int   |       学期编号       |
+|  username   | string |      教务用户名      |
+|  password   | string |       教务密码       |
+| vpnusername | string | w.buct.edu.cn 用户名 |
+| vpnpassword | string | w.buct.edu.cn  密码  |
+
+ResponseType:**JSON**
+
+Response Date:
+
+```json
+{
+    'status' : True, // 此次请求是否成功
+    'info'   : ''    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+    'data'	 : ''	 // 所请求的数据，没有则为空
+}
+```
+
+# 小程序反馈接口
+
+此模块负责小程序反馈功能，提供基本的添加反馈功能，后阶段需要提供一个供后台使用的查看管理页面。
+
