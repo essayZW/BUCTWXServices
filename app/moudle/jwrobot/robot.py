@@ -301,7 +301,7 @@ class Robot(object):
         head['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
         if 'Upgrade-Insecure-Requests' in head:
             head.pop('Upgrade-Insecure-Requests')
-        print(dict)
+        # print(dict)
         #for value in dict.values():
             #print(format(value))
         return dict

@@ -70,6 +70,7 @@ def getAllGrade():
     res['data'] = allGrade
     res['info'] = 'success'
     res['sinfo'] = robot.getUserInfo()
+    res['sinfo']['gpa'] = robot.getGPA()
     return json.dumps(res)
 
 @jwBlueprint.route('/getSingleGrade',methods = ['POST'])
