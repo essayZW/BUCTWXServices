@@ -267,12 +267,12 @@ class Robot(object):
         for j in range(5):
             datas['ksmcdmb_id']=ksmcList[j]
             rep = self.__req.post(self.baseUrl + '/jwglxt/kwgl/kscx_cxXsksxxIndex.html?doType=query&gnmkdm=N358105', data = datas, headers = head, verify = False)
-            #print(json.loads(rep.text))
+            examInfoJSON = json.loads(rep.text)
+            for i in examInfoJSON['items']:
+                ksxxList.append(i)
             if __name__ == "__main__":
-                examInfoJSON = json.loads(rep.text)
-                for i in examInfoJSON['items']:
-                    ksxxList.append(i)
-                    print('考试名称：%s;\n课程名: %s;\n班级: %s;\n老师: %s ;\n时间 : %s ;\n地点 ：%s ;\n\n\n' % (i['ksmc'], i['kcmc'], i['bj'], i['jsxx'], i['kssj'], i['cdmc']))
+                None
+                # print('考试名称：%s;\n课程名: %s;\n班级: %s;\n老师: %s ;\n时间 : %s ;\n地点 ：%s ;\n\n\n' % (i['ksmc'], i['kcmc'], i['bj'], i['jsxx'], i['kssj'], i['cdmc']))
         return ksxxList
     
     #得到GPA

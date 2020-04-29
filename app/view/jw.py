@@ -205,4 +205,5 @@ def getTestInfo():
     examInfo = robot.getExamInfo(xnm,xqm)
     res['data'] = examInfo
     res['info'] = 'success'
+    res['status'] = True
     return json.dumps(res)
