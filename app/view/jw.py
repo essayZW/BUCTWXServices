@@ -142,7 +142,7 @@ def getSchedule():
     res['info'] = 'success'
     return json.dumps(res)
 
-@jwBlueprint.route('/getGpa', mothods = ['POST'])
+@jwBlueprint.route('/getGpa', methods = ['POST'])
 def getGpa():
     res = {
         'status' : False,
@@ -174,7 +174,7 @@ def getGpa():
     res['info'] = 'success'
     return json.dumps(res)
 
-@jwBlueprint.route('/getExamInfo', mothods = ['POST'])
+@jwBlueprint.route('/getExamInfo', methods = ['POST'])
 def getTestInfo():
     res = {
         'status' : False,
