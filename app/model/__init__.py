@@ -6,3 +6,6 @@
 '''
 from . import test_model
 # 测试代码结束
+
+# 引入反馈功能模型
+from . import feedbackmodel

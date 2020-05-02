@@ -10,3 +10,5 @@ from . import test
 
 # 教务相关的视图
 from . import jw
+# 反馈相关的视图
+from . import feedback

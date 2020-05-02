@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 import time
 import json
-from app import App, view, AppCofig, encrypt
+from app import App, view, AppCofig, encrypt, decrypt
 from flask import request, make_response
 if __name__ == "__main__":
     # 测试代码开始
@@ -14,11 +14,22 @@ if __name__ == "__main__":
     # 注册教务蓝图,并设置URL前缀为 /jw
     App.register_blueprint(view.jw.jwBlueprint, url_prefix = '/jw')
 
+    # 注册反馈蓝图，URL前缀为 /feedBack
+    App.register_blueprint(view.feedback.feedBackBlueprint, url_prefix='/feedBack')
+
     # 请求安全性验证
     @App.before_request
     def check():
         if AppCofig['debug']:
             return
+        # 对参数进行预处理
+        requestData = dict(request.form)
+        decryptList = ['username', 'password', 'vpnusername', 'vpnpassword']
+        for i in decryptList:
+            if not requestData.get(i):
+                continue
+            requestData[i] = decrypt(requestData[i])
+        request.form = requestData
         if not request.args.get('token') or not request.args.get('timetoken') or not request.args.get('random'):
             return make_response(json.dumps({
                 'status' : 403,
@@ -64,6 +75,21 @@ if __name__ == "__main__":
                 'info'   : 'error token'
             }), 403)
     
+    # 处理500页面
+    @App.errorhandler(500)
+    def pageRuntimeError(e):
+        return json.dumps({
+            'status' : False,
+            'info' : 'Runtime Error',
+        }), 500
+
+    # 处理404界面
+    @App.errorhandler(404)
+    def pageNotFound(e):
+        return json.dumps({
+            'status' : False,
+            'info' : 'Not Found'
+        }), 404
     # 运行
     App.run(
         debug = AppCofig['debug'],
