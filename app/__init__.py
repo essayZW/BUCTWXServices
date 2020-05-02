@@ -5,6 +5,7 @@ from flask import Flask
 # 引入配置文件
 from .config import AppCofig
 from .config import encrypt
+from .config import decrypt
 # 视图
 from app import view
 # 实例化Flask对象

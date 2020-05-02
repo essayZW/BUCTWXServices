@@ -1,5 +1,6 @@
 # -*- encoding: utf8 -*-
 import random
+import base64
 # 配置文件
 AppCofig = {
     # 应用运行相关设置
@@ -61,6 +62,9 @@ def encrypt(timetoken, randomnum):
             base *= 2
         hexstr += (hexdict[res] + hexdict[random.randint(0, 15)])
     return hexstr
+# 解密函数，与上面的加密函数不是一套
+def decrypt(encryptStr):
+    return base64.b64decode(encryptStr).decode('utf-8')
 if __name__ == "__main__":
     import time
     a = int(round(time.time() * 1000))
