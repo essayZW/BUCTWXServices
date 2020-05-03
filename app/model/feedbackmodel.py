@@ -37,14 +37,14 @@ def add(data):
     cursor = con.cursor()
 
     # 插入
-    insert = "insert into feedback values(data['email'], data['content'], data['time'], data[score[0]], data[score[1]], data[score[2]])"
+    insert = "insert into feedback (email, content, time, use_score, style_score, fun_score) values(%s, %s, %s, %s, %s, %s)"
 
     flag = True
     try:
         # 执行
-        cursor.execute(insert)
+        cursor.execute(insert, (data['email'], data['content'], data['time'], data['score'][0], data['score'][1], data['score'][2]))
         # 提交
-        db.commit()
+        con.commit()
     except:
         flag = False
     

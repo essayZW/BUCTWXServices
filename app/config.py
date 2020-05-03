@@ -14,19 +14,19 @@ AppCofig = {
 
     # 数据库相关设置
     # 数据库用户名
-    'username'      : '',
+    'username'      : 'root',
     # 数据库密码 
-    'password'      : '',
+    'password'      : 'beihai',
     # 数据库地址
-    'databasehost'  : '127.0.0.1',
+    'databasehost'  : 'imessay.cn',
     # 数据库端口
-    'databaseport'  : '3306',
+    'databaseport'  : 3306,
     # 数据库库名
-    'database'      : '',
+    'database'      : 'wxServices',
 
     # 请求安全性验证设置
-    # URL过期时间，单位：毫秒，默认1分钟
-    'maxtime'      : 60000 
+    # URL过期时间，单位：毫秒，默认5秒
+    'maxtime'      : 5000
 }
 
 # 加密函数
