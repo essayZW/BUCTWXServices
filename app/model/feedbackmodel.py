@@ -1,4 +1,5 @@
 # -*- encoding: utf8 -*-
+import pymysql
 # 引入数据库配置
 from ..config import AppCofig
 # 向数据库添加一条记录
@@ -20,5 +21,36 @@ def add(data):
     score的三个项都是int类型，如果用户没有填写就是-1
     建议score的三个字段名字为use_score, style_score, fun_score
     '''
-    # print(data)
-    return True
+    # 连接数据库
+    configSQL = {
+        'host' : AppCofig['databasehost'],
+        'port' : AppCofig['databaseport'],
+        'user' : AppCofig['username'], 
+        'passwd' : AppCofig['password'], 
+        'db' : AppCofig['database'], 
+        'charset' : 'utf8',
+        'cursorclass' : pymysql.cursors.DictCursor
+    }
+
+    # 游标
+    con = pymysql.connect(**configSQL)
+    cursor = con.cursor()
+
+    # 插入
+    insert = "insert into feedback values(data['email'], data['content'], data['time'], data[score[0]], data[score[1]], data[score[2]])"
+
+    flag = True
+    try:
+        # 执行
+        cursor.execute(insert)
+        # 提交
+        db.commit()
+    except:
+        flag = False
+    
+    finally:
+        # 关闭游标
+        cursor.close()
+        # 关闭数据库连接
+        con.close()
+    return flag

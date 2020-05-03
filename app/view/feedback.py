@@ -13,6 +13,7 @@ def addFeedBack():
         'info' : '',
         'data' : ''
     }
+    email = request.form.get('email')
     content = request.form.get('content')
     time = request.form.get('time')
     score = list()
@@ -32,7 +33,7 @@ def addFeedBack():
     if not content or not time:
         rep['info'] = '缺少参数'
         return json.dumps(rep)
-    
+
     # 验证长度以及数据类型
     if len(content) > 400:
         rep['info'] = '内容过长'
@@ -40,6 +41,7 @@ def addFeedBack():
     
     # 调用模型中的add函数添加到数据库
     rep['status'] = feedbackmodel.add({
+        'email'   : email,
         'content' : content,
         'time'    : time,
         'score'   : score
