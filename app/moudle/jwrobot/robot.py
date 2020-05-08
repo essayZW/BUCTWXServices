@@ -273,7 +273,28 @@ class Robot(object):
             if __name__ == "__main__":
                 None
                 # print('考试名称：%s;\n课程名: %s;\n班级: %s;\n老师: %s ;\n时间 : %s ;\n地点 ：%s ;\n\n\n' % (i['ksmc'], i['kcmc'], i['bj'], i['jsxx'], i['kssj'], i['cdmc']))
-        return ksxxList
+        dict = {
+            'kcmc' : '',
+            'cdmc' : '',
+            'kssj' : '',
+            'jsxx' : ''
+        }
+        info = []
+        for i in ksxxList:
+            dict['kcmc'] = i['kcmc']
+            dict['cdmc'] = i['cdmc']
+            dict['kssj'] = i['kssj']
+            dict['jxss'] = i['jsxx']
+            info.append(dict)
+
+        if ksxxList:
+            return info
+        else:
+            print(self.getExamTime())
+            return self.getExamTime()
+
+        
+        
     
     #得到GPA
     def getGPA(self):
@@ -306,8 +327,44 @@ class Robot(object):
             #print(format(value))
         return dict
 
-
-
+    # 得到考试时间
+    def getExamTime(self):
+        if not self.__isLogin:
+            return None
+        examTimeUrl = self.baseUrl + '/jwglxt/design/funcData_cxFuncDataList.html?func_widget_guid=58944B9C2CD784DBE053839D04CA5AD7&gnmkdm=N358163&su=' + self.__username
+        datas = {
+            '_search' : False,
+            'nd' : self.nowTime,
+            'queryModel.showCount' : 15,
+            'queryModel.currentPage' : 1,
+            'queryModel.sortName' : ' ',
+            'queryModel.sortOrder' : 'asc',
+        }
+        head = self.header
+        head['X-Requested-With'] = 'XMLHttpRequest'
+        head['Referer'] = examTimeUrl
+        head['Accept'] = 'application/json, text/javascript, */*; q=0.01'
+        head['Content-Type'] = 'application/x-www-form-urlencoded;charset=UTF-8'
+        if 'Upgrade-Insecure-Requests' in head:
+            head.pop('Upgrade-Insecure-Requests')
+        rep = self.__req.post(self.baseUrl+'/jwglxt/design/funcData_cxFuncDataList.html?func_widget_guid=58944B9C2CD784DBE053839D04CA5AD7&gnmkdm=N358163', data = datas, headers = head, verify = False)
+        examTime=json.loads(rep.text)
+        #print(examTime)
+        dict = {
+            'kcmc' : '',
+            'cdmc' : '暂无',
+            'kssj' : '',
+            'jsxx' : '暂无'
+        }
+        info = []
+        for i in examTime['items']:
+            #正则表达式修改时间格式  
+            dict['kcmc'] = i['kcmc']
+            dict['kssj'] = i['kssj']
+            info.append(dict)
+        #print(info)
+        return info     
 
 if __name__ == "__main__":
     None
+
