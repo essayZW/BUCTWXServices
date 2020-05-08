@@ -350,5 +350,34 @@ Response Date:
 
 # 小程序反馈接口
 
-此模块负责小程序反馈功能，提供基本的添加反馈功能，后阶段需要提供一个供后台使用的查看管理页面。
+此模块暂时由一个接口。
 
+* 添加一条反馈信息
+
+## 添加反馈信息
+URL:`/feedBack/add`
+
+Method: **POST**
+
+Params:
+
+|     参数名     |  类型   |           说明           |
+| :------------: | :-----: | :----------------------: |
+|    content     | string  | 反馈内容,不超过400，必须 |
+|     email      | string  |           邮箱           |
+|   use_score    | integer |       使用操作分数       |
+|  style_score   | integer |       界面样式分数       |
+| function_score | integer |   w.buct.edu.cn 用户名   |
+|      time      | string  |  提交时间，是一个时间戳  |
+
+ResponseType:**JSON**
+
+Response Date:
+
+```json
+{
+    'status' : True, // 此次请求是否成功
+    'info'   : ''    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+    'data'	 : ''	 // 所请求的数据，没有则为空
+}
+```
