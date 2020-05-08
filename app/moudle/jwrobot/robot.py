@@ -350,15 +350,16 @@ class Robot(object):
         rep = self.__req.post(self.baseUrl+'/jwglxt/design/funcData_cxFuncDataList.html?func_widget_guid=58944B9C2CD784DBE053839D04CA5AD7&gnmkdm=N358163', data = datas, headers = head, verify = False)
         examTime=json.loads(rep.text)
         #print(examTime)
-        dict = {
-            'kcmc' : '',
-            'cdmc' : '暂无',
-            'kssj' : '',
-            'jsxx' : '暂无'
-        }
+        
         info = []
         pattern = re.compile('^(\d+?)\-(\d+?)\-(\d+?) (\d+?)\:(\d+?)\-(\d+?)\:(\d+?)$')
         for i in examTime['items']:
+            dict = {
+                'kcmc' : '',
+                'cdmc' : '暂无',
+                'kssj' : '',
+                'jsxx' : '暂无'
+            }
             #正则表达式修改时间格式  
             dict['kcmc'] = i['kcmc']
             dict['kssj'] = i['kssj']
