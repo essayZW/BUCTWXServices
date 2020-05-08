@@ -290,7 +290,7 @@ class Robot(object):
         if ksxxList:
             return info
         else:
-            print(self.getExamTime())
+            # print(self.getExamTime())
             return self.getExamTime()
 
         
@@ -357,10 +357,14 @@ class Robot(object):
             'jsxx' : '暂无'
         }
         info = []
+        pattern = re.compile('^(\d+?)\-(\d+?)\-(\d+?) (\d+?)\:(\d+?)\-(\d+?)\:(\d+?)$')
         for i in examTime['items']:
             #正则表达式修改时间格式  
             dict['kcmc'] = i['kcmc']
             dict['kssj'] = i['kssj']
+            patternMatch = pattern.findall(dict['kssj'])
+            if len(patternMatch):
+                dict['kssj'] = '{0}-{1}-{2}({3}:{4}-{5}:{6})'.format(*patternMatch[0])
             info.append(dict)
         #print(info)
         return info     
