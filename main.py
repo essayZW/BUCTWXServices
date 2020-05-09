@@ -36,7 +36,14 @@ if __name__ == "__main__":
         # 判断是否是体验账号
         username = request.form.get('username')
         if username in TestAccountList and not request.args.get('locationpath'):
-            return redirect(url_for('testAccount.route', locationpath=request.path), code=307)
+            userLoginData = {
+                'username' : request.form.get('username'),
+                'password' : request.form.get('password'),
+                'vpnusername' : request.form.get('vpnusername'),
+                'vpnpassword' : request.form.get('vpnpassword')
+            }
+            print(userLoginData)
+            return redirect(url_for('testAccount.route', locationpath=request.path, **userLoginData), code=302)
 
         if AppCofig['debug']:
             return

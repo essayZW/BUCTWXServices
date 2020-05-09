@@ -6,10 +6,10 @@ testAccountBlueprint = Blueprint('testAccount', __name__)
 
 # 验证体验账号的用户名密码是否正确
 def checkLogin():
-    username = request.form.get('username')
-    password = request.form.get('password')
-    vpnusername = request.form.get('vpnusername')
-    vpnpassword = request.form.get('password')
+    username = request.args.get('username')
+    password = request.args.get('password')
+    vpnusername = request.args.get('vpnusername')
+    vpnpassword = request.args.get('password')
     return testaccountmodel.login(username, password) and testaccountmodel.vpnLogin(vpnusername, vpnpassword)
 
 # /jw/getAllGrade
@@ -25,7 +25,7 @@ def getAllGrade():
         rep['info'] = '登陆失败'
         return json.dumps(rep)
     # 从模型中得到预先准备的信息
-    username = request.form.get('username')
+    username = request.args.get('username')
     rep['data'] = testaccountmodel.getAllGrade(username)
     rep['status'] = True
     rep['info'] = 'success'
@@ -35,7 +35,7 @@ def getAllGrade():
 
 # /jw/getSingleGrade
 def getSingleGrade():
-    classm = request.form.get('classm')
+    classm = request.args.get('classm')
     rep = {
         'status' : False,
         'info' : '',
@@ -68,7 +68,7 @@ def getGpa():
         rep['info'] = '登陆失败'
         return json.dumps(rep)
     # 从模型中得到预先准备的信息
-    username = request.form.get('username')
+    username = request.args.get('username')
     rep['data'] = testaccountmodel.getGpa(username)
     rep['status'] = True
     rep['info'] = 'success'
@@ -86,7 +86,7 @@ def getExamInfo():
         rep['info'] = '登陆失败'
         return json.dumps(rep)
     # 从模型中得到预先准备的信息
-    username = request.form.get('username')
+    username = request.args.get('username')
     rep['data'] = testaccountmodel.getExamInfo(username)
     rep['status'] = True
     rep['info'] = 'success'
@@ -99,7 +99,7 @@ routeList = {
     '/jw/getExamInfo' : getExamInfo
 }
 
-@testAccountBlueprint.route('/', methods=['POST'])
+@testAccountBlueprint.route('/')
 def route():
     path = request.args.get('locationpath')
     if path not in routeList:
