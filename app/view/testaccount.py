@@ -99,7 +99,7 @@ routeList = {
     '/jw/getExamInfo' : getExamInfo
 }
 
-@testAccountBlueprint.route('/')
+@testAccountBlueprint.route('/', methods=['POST', 'GET'])
 def route():
     path = request.args.get('locationpath')
     if path not in routeList:
