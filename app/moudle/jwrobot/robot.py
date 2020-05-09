@@ -180,6 +180,8 @@ class Robot(object):
             temp = []
             for j in tds:
                 temp.append(j.string.replace('&nbsp;', '').replace('\xa0', '').replace('【', '').replace('】', '').replace(' ', ''))
+            if '总评' in temp:
+                temp[1] = '100%'
             res.append(temp)
         return res
      
