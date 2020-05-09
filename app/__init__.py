@@ -6,6 +6,8 @@ from flask import Flask
 from .config import AppCofig
 from .config import encrypt
 from .config import decrypt
+from .config import TokenPathList
+from .config import TestAccountList
 # 视图
 from app import view
 # 实例化Flask对象

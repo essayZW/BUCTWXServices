@@ -1,8 +1,8 @@
 # -*- encoding: utf-8 -*-
 import time
 import json
-from app import App, view, AppCofig, encrypt, decrypt
-from flask import request, make_response
+from app import App, view, AppCofig, encrypt, decrypt, TokenPathList, TestAccountList
+from flask import request, make_response, redirect, url_for
 if __name__ == "__main__":
     # 测试代码开始
     '''
@@ -17,19 +17,33 @@ if __name__ == "__main__":
     # 注册反馈蓝图，URL前缀为 /feedBack
     App.register_blueprint(view.feedback.feedBackBlueprint, url_prefix='/feedBack')
 
+    # 注册体验账号蓝图,URL前缀为 /testaccount
+    App.register_blueprint(view.testaccount.testAccountBlueprint, url_prefix='/testAccount')
     # 请求安全性验证
     @App.before_request
     def check():
+        if not AppCofig['debug'] and not request.args.get('locationpath'):
+            # 非开发模式和重定向情况下不执行
+            # 对参数进行预处理
+            requestData = dict(request.form)
+            decryptList = ['username', 'password', 'vpnusername', 'vpnpassword']
+            for i in decryptList:
+                if not requestData.get(i):
+                    continue
+                requestData[i] = decrypt(requestData[i])
+            request.form = requestData
+
+        # 判断是否是体验账号
+        username = request.form.get('username')
+        if username in TestAccountList and not request.args.get('locationpath'):
+            return redirect(url_for('testAccount.route', locationpath=request.path), code=307)
+
         if AppCofig['debug']:
             return
-        # 对参数进行预处理
-        requestData = dict(request.form)
-        decryptList = ['username', 'password', 'vpnusername', 'vpnpassword']
-        for i in decryptList:
-            if not requestData.get(i):
-                continue
-            requestData[i] = decrypt(requestData[i])
-        request.form = requestData
+        
+        # 判断是否在token保护列表中
+        if request.path not in TokenPathList:
+            return
         if not request.args.get('token') or not request.args.get('timetoken') or not request.args.get('random'):
             return make_response(json.dumps({
                 'status' : 403,

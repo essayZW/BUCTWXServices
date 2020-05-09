@@ -9,3 +9,5 @@ from . import test_model
 
 # 引入反馈功能模型
 from . import feedbackmodel
+# 引入体验账号模型
+from . import testaccountmodel
