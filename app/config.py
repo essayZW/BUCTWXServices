@@ -29,6 +29,27 @@ AppCofig = {
     'maxtime'      : 5000
 }
 
+# token path list
+TokenPathList = [
+    '/jw/getAllGrade',
+    '/jw/getSingleGrade',
+    '/jw/getStuInfo',
+    '/jw/getGpa',
+    '/jw/getSchedule',
+    '/jw/getExamInfo',
+    '/feedBack/add'
+]
+
+# test account list
+TestAccountList = {
+    '1234567890' : {
+        'username' : '1234567890',
+        'password' : 'testaccount',
+        'vpnusername' : '1234567890',
+        'vpnpassword' : 'testaccount'
+    }
+}
+
 # 加密函数
 def encrypt(timetoken, randomnum):
     numArr = []

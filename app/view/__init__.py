@@ -12,3 +12,5 @@ from . import test
 from . import jw
 # 反馈相关的视图
 from . import feedback
+# 体验账号模块
+from . import testaccount
