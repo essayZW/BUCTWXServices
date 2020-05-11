@@ -91,12 +91,34 @@ def getExamInfo():
     rep['status'] = True
     rep['info'] = 'success'
     return json.dumps(rep)
+
+# 得到体验账号的用户信息
+def getStuInfo():
+    rep = {
+        'status' : False,
+        'info' : '',
+        'data' : ''
+    }
+    # 检查体验账号的登陆
+    rep['status'] = checkLogin()
+    if not rep['status']:
+        rep['info'] = '登陆失败'
+        return json.dumps(rep)
+    # 从模型中得到预先准备的信息
+    username = request.args.get('username')
+    rep['data'] = testaccountmodel.getStuInfo(username)
+    rep['data']['gpa'] = testaccountmodel.getGpa(username)
+    rep['status'] = True
+    rep['info'] = 'success'
+    return json.dumps(rep)
+
 # 自定义的路由列表，绑定函数以及对应的API地址
 routeList = {
     '/jw/getAllGrade' : getAllGrade,
     '/jw/getSingleGrade' : getSingleGrade,
     '/jw/getGpa' : getGpa,
-    '/jw/getExamInfo' : getExamInfo
+    '/jw/getExamInfo' : getExamInfo,
+    '/jw/getStuInfo' : getStuInfo
 }
 
 @testAccountBlueprint.route('/')
