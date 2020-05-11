@@ -53,6 +53,7 @@ def getStuInfo(username):
         data = f.read()
     data = json.loads(data)
     return data[username] if username in data else {}
+
 def getExamInfo(username):
     #  得到体验账号的个人信息
     data = {}

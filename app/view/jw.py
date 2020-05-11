@@ -30,6 +30,7 @@ def getStuInfo():
         res['info'] = '用户名或者密码错误'
         return json.dumps(res)
     info = robot.getUserInfo()
+    info['gpa'] = robot.getGPA()
     res['status'] = True
     res['data'] = info
     res['info'] = 'success'
