@@ -381,3 +381,35 @@ Response Date:
     'data'	 : ''	 // 所请求的数据，没有则为空
 }
 ```
+
+# 小程序页面设置
+
+该模块的视图提供了对于小程序的一些设置，小程序获取这些设置以更新部分内容
+
+## 得到首页轮播图设置
+
+URL:`/swiper/getAll`
+
+Method: **POST**
+
+Params:**None**
+
+ResponseType:**JSON**
+
+Response Date:
+
+```json
+{
+    'status' : True, // 此次请求是否成功
+    'info'   : '',    // 请求处理的相关信息，一般成功了的话就是success,失败的话就是大概的错误信息
+    'data'	 : [
+    	'type' : ''	//该轮播的类型，src代表页面跳转，alert代表弹出信息
+    	'dataset' : {
+    		'src': '', // 如果是src类型则该条描述了跳转至何处
+        	'alertcontent' : ''	// 如果是alert类型则给该条携带了显示的信息
+		},
+		'image' : ''	// 轮播图的图片地址
+    ]
+}
+```
+

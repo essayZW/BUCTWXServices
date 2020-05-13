@@ -37,7 +37,8 @@ TokenPathList = [
     '/jw/getGpa',
     '/jw/getSchedule',
     '/jw/getExamInfo',
-    '/feedBack/add'
+    '/feedBack/add',
+    '/swiper/getAll'
 ]
 
 # test account list

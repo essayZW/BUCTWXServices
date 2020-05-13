@@ -14,3 +14,5 @@ from . import jw
 from . import feedback
 # 体验账号模块
 from . import testaccount
+# 轮播图设置模块
+from . import swiper
