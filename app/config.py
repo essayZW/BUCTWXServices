@@ -45,9 +45,9 @@ TokenPathList = [
 TestAccountList = {
     '1234567890' : {
         'username' : '1234567890',
-        'password' : 'testaccount',
+        'password' : 'bucter',
         'vpnusername' : '1234567890',
-        'vpnpassword' : 'testaccount'
+        'vpnpassword' : 'bucter'
     }
 }
 
