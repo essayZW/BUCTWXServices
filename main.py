@@ -19,6 +19,9 @@ if __name__ == "__main__":
 
     # 注册体验账号蓝图,URL前缀为 /testaccount
     App.register_blueprint(view.testaccount.testAccountBlueprint, url_prefix='/testAccount')
+
+    # 注册轮播图设置蓝图，URL前缀为 /swiper
+    App.register_blueprint(view.swiper.swiperBlueprint, url_prefix='/swiper')
     # 请求安全性验证
     @App.before_request
     def check():
