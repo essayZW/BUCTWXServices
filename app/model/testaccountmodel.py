@@ -61,3 +61,11 @@ def getExamInfo(username):
         data = f.read()
     data = json.loads(data)
     return data[username] if username in data else {}
+
+def getSchedule(username):
+    #  得到体验账号的课表信息
+    data = {}
+    with open(getDataPath('jwSchedule.txt'), 'r', encoding="utf-8") as f:
+        data = f.read()
+    data = json.loads(data)
+    return data[username] if username in data else {}
