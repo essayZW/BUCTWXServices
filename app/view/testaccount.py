@@ -9,7 +9,7 @@ def checkLogin():
     username = request.args.get('username')
     password = request.args.get('password')
     vpnusername = request.args.get('vpnusername')
-    vpnpassword = request.args.get('password')
+    vpnpassword = request.args.get('vpnpassword')
     return testaccountmodel.login(username, password) and testaccountmodel.vpnLogin(vpnusername, vpnpassword)
 
 # /jw/getAllGrade
