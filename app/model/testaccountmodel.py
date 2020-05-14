@@ -14,7 +14,7 @@ def vpnLogin(vpnusername, vpnpassword):
     # 假装体验账号的VPN登陆
     if vpnusername not in TestAccountList:
         return False
-    if not TestAccountList[vpnusername]['vpnpassword']:
+    if not TestAccountList[vpnusername]['vpnpassword'] == vpnpassword:
         return False
     return True
 
