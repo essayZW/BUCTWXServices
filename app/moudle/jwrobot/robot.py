@@ -236,22 +236,25 @@ class Robot(object):
 
     # 得到考试信息
     def getExamInfo(self, xnm, xqm):
-        ksmcList = ['8E569BD0DA474BB8E053839D04CA7EAC', '93440BDCB2A3FBD6E053B39AC379A13C', '9589DCFE12BBDCD2E053B39AC3793C77', '8D26239B56E2C2C0E053839D04CA77D7','922B28A14A0EDD81E053B39AC3796812']
-        """
-        '8E569BD0DA474BB8E053839D04CA7EAC' #补考
-        '93440BDCB2A3FBD6E053B39AC379A13C' #单开班重修期末考试
-        '9589DCFE12BBDCD2E053B39AC3793C77' #考查课期末考试
-        '8D26239B56E2C2C0E053839D04CA77D7' #期末考试
-        '922B28A14A0EDD81E053B39AC3796812' #期中考试
-        """
         if not self.__isLogin:
             return None
-        examInfoUrl = self.baseUrl + '/jwglxt/kwgl/kscx_cxXsksxxIndex.html?gnmkdm=N358105&layout=default&su=' + self.__username
         xqm = [3, 12, 16][int(xqm) - 1]
+        # ksmcdmb_id，需要动态获取
+        ksmcList = []
+        rep = self.__req.post(self.baseUrl + '/jwglxt/ksglcommon/common_cxKsmcByXnxq.html?gnmkdm=N358105', data = {
+            'xqm' : xqm,
+            'xnm' : xnm
+        }, headers = self.header, verify = False)
+        ksmcdmbJSON = json.loads(rep.text);
+        for i in ksmcdmbJSON:
+            ksmcList.append(i['KSMCDMB_ID'])
+        # print(ksmcList)
+        # 获取考试信息
+        examInfoUrl = self.baseUrl + '/jwglxt/kwgl/kscx_cxXsksxxIndex.html?gnmkdm=N358105&layout=default&su=' + self.__username
         datas = {
             'xnm' : xnm,
             'xqm' : xqm,
-            'ksmcdmb_id' : '8D26239B56E2C2C0E053839D04CA77D7',
+            'ksmcdmb_id' : '',
             '_search' : False,
             'nd' : self.nowTime,
             'queryModel.showCount' : 30,
@@ -268,7 +271,7 @@ class Robot(object):
         if 'Upgrade-Insecure-Requests' in head:
             head.pop('Upgrade-Insecure-Requests')
         ksxxList = []
-        for j in range(5):
+        for j in range(len(ksmcList)):
             datas['ksmcdmb_id']=ksmcList[j]
             rep = self.__req.post(self.baseUrl + '/jwglxt/kwgl/kscx_cxXsksxxIndex.html?doType=query&gnmkdm=N358105', data = datas, headers = head, verify = False)
             examInfoJSON = json.loads(rep.text)
@@ -277,20 +280,14 @@ class Robot(object):
             if __name__ == "__main__":
                 None
                 # print('考试名称：%s;\n课程名: %s;\n班级: %s;\n老师: %s ;\n时间 : %s ;\n地点 ：%s ;\n\n\n' % (i['ksmc'], i['kcmc'], i['bj'], i['jsxx'], i['kssj'], i['cdmc']))
-        dict = {
-            'kcmc' : '',
-            'cdmc' : '',
-            'kssj' : '',
-            'jsxx' : ''
-        }
         info = []
         for i in ksxxList:
-            dict['kcmc'] = i['kcmc']
-            dict['cdmc'] = i['cdmc']
-            dict['kssj'] = i['kssj']
-            dict['jxss'] = i['jsxx']
-            info.append(dict)
-
+            info.append({
+                'kcmc' : i['kcmc'],
+                'cdmc' : i['cdmc'],
+                'kssj' : i['kssj'],
+                'jsxx' : i['jsxx']
+            })
         if ksxxList:
             return info
         else:
