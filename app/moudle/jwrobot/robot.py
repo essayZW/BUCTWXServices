@@ -83,6 +83,8 @@ class Robot(object):
         return self.__isLogin
     # VPN登陆
     def vpnLogin(self, username, password):
+        # 由于学校VPN系统变更，现在暂时不需要VPN登陆
+        return True
         if self.useVpn:
             return True
         vpnUrl = 'https://w.buct.edu.cn/users/sign_in'

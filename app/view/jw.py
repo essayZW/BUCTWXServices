@@ -20,7 +20,7 @@ def getStuInfo():
     if not userName or not passWord or not vpnUserName or not vpnPassWord:
         res['info'] = '缺少参数'
         return json.dumps(res)
-    robot = Robot('https://jwglxt.w.buct.edu.cn', userName, passWord)
+    robot = Robot('https://jwglxt-proxy2.buct.edu.cn', userName, passWord)
     vpnlogon = robot.vpnLogin(vpnUserName, vpnPassWord)
     if not vpnlogon:
         res['info'] = 'VPN用户名或者密码错误'
@@ -55,7 +55,7 @@ def getAllGrade():
     if not userName or not passWord or not vpnUserName or not vpnPassWord or not xnm or not xqm:
         res['info'] = '缺少参数'
         return json.dumps(res)
-    robot = Robot('https://jwglxt.w.buct.edu.cn', userName, passWord)
+    robot = Robot('https://jwglxt-proxy2.buct.edu.cn', userName, passWord)
     vpnlogon = robot.vpnLogin(vpnUserName, vpnPassWord)
     if not vpnlogon:
         res['info'] = 'VPN用户名或者密码错误'
@@ -93,7 +93,7 @@ def getSingleGrade():
     if not userName or not passWord or not vpnUserName or not vpnPassWord or not xnm or not xqm or not classm:
         res['info'] = '缺少参数'
         return json.dumps(res)
-    robot = Robot('https://jwglxt.w.buct.edu.cn', userName, passWord)
+    robot = Robot('https://jwglxt-proxy2.buct.edu.cn', userName, passWord)
     vpnlogon = robot.vpnLogin(vpnUserName, vpnPassWord)
     if not vpnlogon:
         res['info'] = 'VPN用户名或者密码错误'
@@ -127,7 +127,7 @@ def getSchedule():
     if not userName or not passWord or not vpnUserName or not vpnPassWord or not xnm or not xqm:
         res['info'] = '缺少参数'
         return json.dumps(res)
-    robot = Robot('https://jwglxt.w.buct.edu.cn', userName, passWord)
+    robot = Robot('https://jwglxt-proxy2.buct.edu.cn', userName, passWord)
     vpnlogon = robot.vpnLogin(vpnUserName, vpnPassWord)
     if not vpnlogon:
         res['info'] = 'VPN用户名或者密码错误'
@@ -159,7 +159,7 @@ def getGpa():
     if not userName or not passWord or not vpnUserName or not vpnPassWord:
         res['info'] = '缺少参数'
         return json.dumps(res)
-    robot = Robot('https://jwglxt.w.buct.edu.cn', userName, passWord)
+    robot = Robot('https://jwglxt-proxy2.buct.edu.cn', userName, passWord)
     vpnlogon = robot.vpnLogin(vpnUserName, vpnPassWord)
     if not vpnlogon:
         res['info'] = 'VPN用户名或者密码错误'
@@ -193,7 +193,7 @@ def getTestInfo():
     if not userName or not passWord or not vpnUserName or not vpnPassWord or not xnm or not xqm:
         res['info'] = '缺少参数'
         return json.dumps(res)
-    robot = Robot('https://jwglxt.w.buct.edu.cn', userName, passWord)
+    robot = Robot('https://jwglxt-proxy2.buct.edu.cn', userName, passWord)
     vpnlogon = robot.vpnLogin(vpnUserName, vpnPassWord)
     if not vpnlogon:
         res['info'] = 'VPN用户名或者密码错误'
