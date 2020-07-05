@@ -6,52 +6,53 @@ swiperBlueprint = Blueprint('swiper', __name__)
 
 @swiperBlueprint.route('/getAll', methods=['POST'])
 def getAllSwiperData():
-    notice = '''# 新版功能
-
-## 教务
-
-* 成绩查询
-* 成绩详情查询
-* GPA查询
-* 考试信息查询
-
-## 校园生活
-
-* 日历功能
-* 待办事件
-* 自动整合考试信息到日历待办
-* 待办与考试信息提醒
-
-## 其他
-
-* 自定义主题颜色切换'''
+    notice = '''# V1.0.4.200705更新日志
+## BUG修复
+1. IOS端无法登陆账户，无法输入
+2. 日历待办页面切换回来初始化问题
+3. 平板环境下图标登陆页面图标未居中
+4. 关于 页面的小程序码未替换
+5. 成绩查询界面对于名字过长的课程显示错乱问题
+6. 第一次使用成绩查询配置好用户名密码后返回查询页面时个人信息不更新
+## 用户体验优化
+1. 成绩查询页面添加 `点击头像或者右滑选择学期查询` 提醒字样
+2. 登陆界面添加隐私声明链接
+## 新增功能
+1. 添加服务器通知推送功能'''
     return json.dumps({
-        'data' : [
-            {
-                'type' : 'src',
-                'dataset' : {
-                    'src' : '/pages/jwgrade/jwgrade',
-                    'alertcontent' : ''
+        'data' : {
+            'swiper' : [
+                {
+                    'type' : 'src',
+                    'dataset' : {
+                        'src' : '/pages/jwgrade/jwgrade',
+                        'alertcontent' : ''
+                    },
+                    'image': 'https://s1.ax1x.com/2020/05/13/YamReS.png'
                 },
-                'image': 'https://s1.ax1x.com/2020/05/13/YamReS.png'
-            },
-            {
-                'type': 'src',
-                'dataset' : {
-                    'src' : '/pages/help/help',
-                    'alertcontent' : ''
+                {
+                    'type': 'src',
+                    'dataset' : {
+                        'src' : '/pages/help/help',
+                        'alertcontent' : ''
+                    },
+                    'image': 'https://s1.ax1x.com/2020/05/13/YamgL8.png'
                 },
-                'image': 'https://s1.ax1x.com/2020/05/13/YamgL8.png'
-            },
-            {
-                'type' : 'alert',
-                'dataset' : {
-                    'src' : '',
-                    'alertcontent' : notice
-                },
-                'image' : 'https://s1.ax1x.com/2020/05/13/YamWdg.png'
+                {
+                    'type' : 'alert',
+                    'dataset' : {
+                        'src' : '',
+                        'alertcontent' : notice
+                    },
+                    'image' : 'https://s1.ax1x.com/2020/05/13/YamWdg.png'
+                }
+            ],
+            'notice' : {
+                'id' : '',
+                'content' : ''
             }
-        ],
+        }        
+        ,
         'info' : 'success',
         'status' : True
     })

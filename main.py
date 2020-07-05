@@ -25,7 +25,7 @@ App.register_blueprint(view.swiper.swiperBlueprint, url_prefix='/swiper')
 # 请求安全性验证
 @App.before_request
 def check():
-    if not AppCofig['debug'] and not request.args.get('locationpath'):
+    if  not request.args.get('locationpath'):
         # 非开发模式和重定向情况下不执行
         # 对参数进行预处理
         requestData = dict(request.form)
