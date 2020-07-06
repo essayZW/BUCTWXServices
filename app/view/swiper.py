@@ -6,7 +6,7 @@ swiperBlueprint = Blueprint('swiper', __name__)
 
 @swiperBlueprint.route('/getAll', methods=['POST'])
 def getAllSwiperData():
-    notice = '''# V1.0.4.200705更新日志
+    notice = '''# V1.1.0.200706更新日志
 ## BUG修复
 1. IOS端无法登陆账户，无法输入
 2. 日历待办页面切换回来初始化问题
@@ -17,8 +17,11 @@ def getAllSwiperData():
 ## 用户体验优化
 1. 成绩查询页面添加 `点击头像或者右滑选择学期查询` 提醒字样
 2. 登陆界面添加隐私声明链接
+3. 去掉首页待开发功能入口
 ## 新增功能
-1. 添加服务器通知推送功能'''
+1. 添加服务器通知推送功能
+## 其他
+1. **因小程序个人类目限制, 关闭待办功能**'''
     return json.dumps({
         'data' : {
             'swiper' : [
