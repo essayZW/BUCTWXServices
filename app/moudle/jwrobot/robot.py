@@ -305,12 +305,16 @@ class Robot(object):
         rep = self.__req.get(gpaUrl, verify = False)
         BS = BeautifulSoup(rep.text,'html.parser')
         allFont = BS.select('#alertBox>font')
-        gpaFont = allFont[1].select_one('font').text
-        timeFont = allFont[0].text
+        try:
+            gpaFont = allFont[1].select_one('font').text
+            timeFont = allFont[0].text
+        except IndexError:
+            gpaFont = 'error'
+            timeFont = ''
         timeCu = re.search('[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])\s+(20|21|22|23|[0-1]\d):[0-5]\d:[0-5]\d', timeFont)
         dict = {
             'gpa' : gpaFont ,
-            'time': timeCu.group()
+            'time': timeCu.group() if not timeCu == None else ''
         }
         """
         'gpa' : gpa
