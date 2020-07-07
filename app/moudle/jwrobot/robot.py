@@ -194,9 +194,12 @@ class Robot(object):
         apiUrl = '/jwglxt/xtgl/index_cxYhxxIndex.html?xt=jw&localeKey=zh_CN&_=' + str(self.nowTime) + '&gnmkdm=index&su=' + self.__username
         rep = self.__req.get(self.baseUrl + apiUrl, verify = False)
         BS = BeautifulSoup(rep.text, 'html.parser')
-        name = BS.select_one('.media-body>h4').text                 #得到姓名
-        classInfo = BS.select_one('.media-body>p').text             #得到年级班级信息
-        headImgUrl = BS.select_one('.media-object').attrs['src']    #得到照片的URL
+        try:
+            name = BS.select_one('.media-body>h4').text                 #得到姓名
+            classInfo = BS.select_one('.media-body>p').text             #得到年级班级信息
+            headImgUrl = BS.select_one('.media-object').attrs['src']    #得到照片的URL
+        except AttributeError:
+            name = classInfo = headImgUrl = ''
         if __name__ == '__main__':
             print(name)
             print(classInfo)
