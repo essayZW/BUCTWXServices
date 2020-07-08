@@ -145,7 +145,13 @@ class Robot(object):
             for i in gradeJSON['items']:
                 print('第%d门课: %s\n班级: %s;\n成绩: %s ;\n绩点 : %s ;\n\n\n' % (num, i['kcmc'], i['bj'], i['cj'], i['jd']))
                 num += 1
-        return json.loads(rep.text)
+        try:
+            gradeRes = json.loads(rep.text)
+        except json.decoder.JSONDecodeError:
+            gradeRes = {
+                'items' : []
+            }
+        return gradeRes
     
     #得到单科成绩信息
     def getScore(self, xnm, xqm, classm):
