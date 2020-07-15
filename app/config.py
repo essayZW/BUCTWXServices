@@ -14,9 +14,9 @@ AppCofig = {
 
     # 数据库相关设置
     # 数据库用户名
-    'username'      : 'root',
+    'username'      : 'code',
     # 数据库密码 
-    'password'      : 'beihai',
+    'password'      : 'tempcoder',
     # 数据库地址
     'databasehost'  : 'imessay.cn',
     # 数据库端口
