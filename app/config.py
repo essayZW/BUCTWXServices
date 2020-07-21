@@ -18,7 +18,7 @@ AppCofig = {
     # 数据库密码 
     'password'      : 'tempcoder',
     # 数据库地址
-    'databasehost'  : 'imessay.cn',
+    'databasehost'  : '127.0.0.1',
     # 数据库端口
     'databaseport'  : 3306,
     # 数据库库名
