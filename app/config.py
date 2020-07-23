@@ -96,7 +96,6 @@ def decrypt(encryptStr, version):
     if not version:
         return base64.b64decode(encryptStr).decode('utf-8')
     aes = Aes(AppCofig['AESkey'], AppCofig['AESiv'])
-    flag = False
     try:
         version = int(version.replace('.', ''))
         if version < 123200732:

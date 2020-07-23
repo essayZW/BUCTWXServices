@@ -41,6 +41,7 @@ def check():
     # 判断是否是体验账号
     username = request.form.get('username')
     if username in TestAccountList and not request.args.get('locationpath'):
+        request.form['version'] = request.args.get('version')
         return redirect(url_for('testAccount.route', locationpath=request.path, **request.form), code=302)
 
     if AppCofig['debug']:
