@@ -99,6 +99,20 @@ def encryptResponse(rep):
         return rep
     if AppCofig['debug']:
         return rep
+    # 低于1.2.3.200732版本的不进行加密
+    version = request.args.get('version')
+    if not version:
+        return rep
+    flag = False
+    try:
+        version = int(version.replace('.', ''))
+        if version < 123200732:
+            flag = True
+    except ValueError:
+        flag = True
+    if flag:
+        return rep
+
     aes = Aes(AppCofig['AESkey'], AppCofig['AESiv'])
     try:
         repData = json.loads(rep.get_data())
