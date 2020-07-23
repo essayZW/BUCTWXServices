@@ -1,6 +1,8 @@
 # -*- encoding: utf8 -*-
 import random
 import base64
+
+from .moudle import Aes
 # 配置文件
 AppCofig = {
     # 应用运行相关设置
@@ -26,7 +28,12 @@ AppCofig = {
 
     # 请求安全性验证设置
     # URL过期时间，单位：毫秒，默认5秒
-    'maxtime'      : 5000
+    'maxtime'      : 5000,
+    # key 以及 iv只在线上环境生效，需要与小程序内的key 与 iv保持一致
+    # 加密key
+    'AESkey'       : '',
+    # 加密iv
+    'AESiv'        : ''
 }
 
 # token path list
@@ -86,7 +93,9 @@ def encrypt(timetoken, randomnum):
     return hexstr
 # 解密函数，与上面的加密函数不是一套
 def decrypt(encryptStr):
-    return base64.b64decode(encryptStr).decode('utf-8')
+    aes = Aes(AppCofig['AESkey'], AppCofig['AESiv'])
+    return aes.decrypt(encryptStr)
+    
 if __name__ == "__main__":
     import time
     a = int(round(time.time() * 1000))

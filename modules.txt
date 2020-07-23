@@ -5,3 +5,4 @@ six==1.14.0
 bs4==0.0.1
 requests==2.23.0
 pymysql==0.9.3
+pycryptodome==3.9.8

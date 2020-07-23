@@ -3,6 +3,7 @@ import time
 import json
 from app import App, view, AppCofig, encrypt, decrypt, TokenPathList, TestAccountList
 from flask import request, make_response, redirect, url_for
+from app import Aes
 
 # 测试代码开始
 '''
@@ -26,7 +27,7 @@ App.register_blueprint(view.swiper.swiperBlueprint, url_prefix='/swiper')
 @App.before_request
 def check():
     if not AppCofig['debug'] and not request.args.get('locationpath'):
-        # 非开发模式和重定向情况下不执行
+        # 开发模式以及重定向情况下不执行
         # 对参数进行预处理
         requestData = dict(request.form)
         decryptList = ['username', 'password', 'vpnusername', 'vpnpassword']
@@ -91,6 +92,23 @@ def check():
             'status' : 403,
             'info'   : 'error token'
         }), 403)
+# 处理响应数据
+@App.after_request
+def encryptResponse(rep):
+    if AppCofig['debug']:
+        return rep
+    aes = Aes(AppCofig['AESkey'], AppCofig['AESiv'])
+    try:
+        repData = json.loads(rep.get_data())
+        if not repData.__contains__('data') or repData['data'] == None:
+            return rep
+        if isinstance(repData['data'], dict) or isinstance(repData['data'], list):
+            repData['data'] = json.dumps(repData['data'])
+        repData['data'] = aes.encrypt(repData['data']).decode("utf-8")
+        rep.set_data(json.dumps(repData))
+    except json.decoder.JSONDecodeError:
+        pass
+    return rep
 
 # 处理500页面
 @App.errorhandler(500)

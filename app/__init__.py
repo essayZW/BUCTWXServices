@@ -10,5 +10,7 @@ from .config import TokenPathList
 from .config import TestAccountList
 # 视图
 from app import view
+# 加密
+from .moudle import Aes
 # 实例化Flask对象
 App = Flask(__name__)
