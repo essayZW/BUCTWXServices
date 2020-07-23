@@ -95,7 +95,7 @@ def check():
 # 处理响应数据
 @App.after_request
 def encryptResponse(rep):
-    if request.path not in TokenPathList:
+    if request.path not in TokenPathList and not request.args.get('locationpath'):
         return rep
     if AppCofig['debug']:
         return rep
