@@ -4,3 +4,5 @@
 
 # 教务类
 from . import jwrobot
+# AES 加密
+from .aes import Aes
