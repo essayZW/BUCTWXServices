@@ -92,9 +92,20 @@ def encrypt(timetoken, randomnum):
         hexstr += (hexdict[res] + hexdict[random.randint(0, 15)])
     return hexstr
 # 解密函数，与上面的加密函数不是一套
-def decrypt(encryptStr):
+def decrypt(encryptStr, version):
+    if not version:
+        return base64.b64decode(encryptStr).decode('utf-8')
     aes = Aes(AppCofig['AESkey'], AppCofig['AESiv'])
-    return aes.decrypt(encryptStr)
+    flag = False
+    try:
+        version = int(version.replace('.', ''))
+        if version < 123200732:
+            res = base64.b64decode(encryptStr).decode('utf-8')
+        else:
+            res = aes.decrypt(encryptStr)
+    except ValueError:
+        res = base64.b64decode(encryptStr).decode('utf-8')
+    return res
     
 if __name__ == "__main__":
     import time

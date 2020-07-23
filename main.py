@@ -26,6 +26,7 @@ App.register_blueprint(view.swiper.swiperBlueprint, url_prefix='/swiper')
 # 请求安全性验证
 @App.before_request
 def check():
+    version = request.args.get('version')
     if not AppCofig['debug'] and not request.args.get('locationpath'):
         # 开发模式以及重定向情况下不执行
         # 对参数进行预处理
@@ -34,7 +35,7 @@ def check():
         for i in decryptList:
             if not requestData.get(i):
                 continue
-            requestData[i] = decrypt(requestData[i])
+            requestData[i] = decrypt(requestData[i], version)
         request.form = requestData
 
     # 判断是否是体验账号
