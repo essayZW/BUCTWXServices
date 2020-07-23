@@ -95,6 +95,8 @@ def check():
 # 处理响应数据
 @App.after_request
 def encryptResponse(rep):
+    if request.path not in TokenPathList:
+        return rep
     if AppCofig['debug']:
         return rep
     aes = Aes(AppCofig['AESkey'], AppCofig['AESiv'])

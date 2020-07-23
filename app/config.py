@@ -31,9 +31,9 @@ AppCofig = {
     'maxtime'      : 5000,
     # key 以及 iv只在线上环境生效，需要与小程序内的key 与 iv保持一致
     # 加密key
-    'AESkey'       : '',
+    'AESkey'       : '845f5e64582dd1ef',
     # 加密iv
-    'AESiv'        : ''
+    'AESiv'        : 'bc50900f02c70465' 
 }
 
 # token path list
