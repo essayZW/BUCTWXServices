@@ -6,14 +6,11 @@ swiperBlueprint = Blueprint('swiper', __name__)
 
 @swiperBlueprint.route('/getAll', methods=['POST'])
 def getAllSwiperData():
-    notice = '''# V1.2.0.200720 更新日志
+    notice = '''# 1.2.4.200824 更新日志
 ## 新增功能
-1. 新增课程表功能
-> 首次使用需要进入 `系统设置->课程表设置` 中进行课程表更新以及该学期第一周日期的设置
-## BUG修复
-1. 修复课程表对于单周双周课程解析的错误
+1. 小程序与服务器通信AES加密
 ## 其他
-1. 首页布局修改优化'''
+1. 课程表时间设置逻辑优化'''
     return json.dumps({
         'data' : {
             'swiper' : [
