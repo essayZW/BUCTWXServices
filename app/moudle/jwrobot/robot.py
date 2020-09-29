@@ -384,6 +384,66 @@ class Robot(object):
         #print(info)
         return info     
 
+
+    def getSpaceClassroom(self, xnm, xqm, weekNum, day, classNum, campusId = 2, buildingId = '', className = ''):
+        '''
+        @param xqm 学年ID
+        @param xnm 学期ID
+        @param weekNum 周次
+        @param day 星期几
+        @param classNum 节次
+        @param campusId 校区ID 默认为2, 代表北区，东区ID是1， 西区是3
+        @param buildingId 场地ID 
+        @param className 场地名称筛选
+        '''
+        if not self.__isLogin:
+            return
+        xqm = int(xqm)
+        xnm = int(xnm)
+        weekNum = int(weekNum)
+        day = int(day)
+        classNum = int(classNum)
+        campusId = int(campusId)
+
+        xqm = [3, 12, 16][int(xqm) - 1]
+        # 处理星期数据
+        xqj = ''
+        import math
+        num = 1
+        while day:
+            if day % 2:
+                xqj += str(num)
+            day = math.floor(day / 2)
+            if day:
+                xqj += ','
+            num += 1
+        apiUrl = '/jwglxt/cdjy/cdjy_cxKxcdlb.html?doType=query&gnmkdm=N2155'
+        data = {
+            'xqm' : xqm,
+            'xnm' : xnm,
+            'fwzt' : 'cx',
+            'xqh_id' : campusId,
+            'cdlb_id' : '',
+            'cdejlb_id' : '',
+            'qszws' : '',
+            'jszws' : '',
+            'cdmc' : className,
+            'lh' : buildingId,
+            'jyfs' : '',
+            'cdjylx' : '',
+            'zcd' : weekNum,
+            'xqj' : xqj,
+            'jcd' : classNum,
+            '_search' : False,
+            'nd' : self.nowTime,
+            'queryModel.showCount': 10000,
+            'queryModel.currentPage' : 1,
+            'queryModel.sortName' : 'cdbh',
+            'queryModel.sortOrder': 'asc',
+        }
+        rep = self.__req.post(self.baseUrl + apiUrl, data= data, headers=self.header)
+        rep = json.loads(rep.text)
+        return rep
+
 if __name__ == "__main__":
     None
-
