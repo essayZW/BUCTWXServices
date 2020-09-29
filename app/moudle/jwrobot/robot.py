@@ -85,33 +85,33 @@ class Robot(object):
     def vpnLogin(self, username, password):
         # 由于学校VPN系统变更，现在暂时不需要VPN登陆
         return True
-        if self.useVpn:
-            return True
-        vpnUrl = 'https://w.buct.edu.cn/users/sign_in'
-        indexBack = self.__req.get(vpnUrl, headers = self.header)
-        indexCode = indexBack.text
-        csrfParamPattern = '<meta name="csrf-param" content="(.*?)" />'
-        csrfParam = re.findall(csrfParamPattern, indexCode)
-        if len(csrfParam) >= 1:
-            csrfParam = csrfParam[0]
-        csrfTokenPattern = '<meta name="csrf-token" content="(.*?)" />'
-        csrfValue = re.findall(csrfTokenPattern, indexCode)
-        if len(csrfValue) >= 1:
-            csrfValue = csrfValue[0]
-        data = {
-            'user[login]' : username,
-            'user[password]' : password,
-            'user[dymatice_code]' : 'unknown',
-            'commit' : '登录 Login'
-        }
-        data[csrfParam] = csrfValue
-        login = self.__req.post(vpnUrl, data = data, headers = self.header)
-        searchLoginStatus = '<li><a rel="nofollow" data-method="delete" href="/users/sign_out">退出登录</a></li>'
-        if searchLoginStatus in login.text:
-            self.useVpn = True
-            return True
-        else:
-            return False
+        # if self.useVpn:
+        #     return True
+        # vpnUrl = 'https://w.buct.edu.cn/users/sign_in'
+        # indexBack = self.__req.get(vpnUrl, headers = self.header)
+        # indexCode = indexBack.text
+        # csrfParamPattern = '<meta name="csrf-param" content="(.*?)" />'
+        # csrfParam = re.findall(csrfParamPattern, indexCode)
+        # if len(csrfParam) >= 1:
+        #     csrfParam = csrfParam[0]
+        # csrfTokenPattern = '<meta name="csrf-token" content="(.*?)" />'
+        # csrfValue = re.findall(csrfTokenPattern, indexCode)
+        # if len(csrfValue) >= 1:
+        #     csrfValue = csrfValue[0]
+        # data = {
+        #     'user[login]' : username,
+        #     'user[password]' : password,
+        #     'user[dymatice_code]' : 'unknown',
+        #     'commit' : '登录 Login'
+        # }
+        # data[csrfParam] = csrfValue
+        # login = self.__req.post(vpnUrl, data = data, headers = self.header)
+        # searchLoginStatus = '<li><a rel="nofollow" data-method="delete" href="/users/sign_out">退出登录</a></li>'
+        # if searchLoginStatus in login.text:
+        #     self.useVpn = True
+        #     return True
+        # else:
+        #     return False
 
 
     #得到成绩信息
