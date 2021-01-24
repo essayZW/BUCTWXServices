@@ -85,33 +85,33 @@ class Robot(object):
     def vpnLogin(self, username, password):
         # 由于学校VPN系统变更，现在暂时不需要VPN登陆
         return True
-        if self.useVpn:
-            return True
-        vpnUrl = 'https://w.buct.edu.cn/users/sign_in'
-        indexBack = self.__req.get(vpnUrl, headers = self.header)
-        indexCode = indexBack.text
-        csrfParamPattern = '<meta name="csrf-param" content="(.*?)" />'
-        csrfParam = re.findall(csrfParamPattern, indexCode)
-        if len(csrfParam) >= 1:
-            csrfParam = csrfParam[0]
-        csrfTokenPattern = '<meta name="csrf-token" content="(.*?)" />'
-        csrfValue = re.findall(csrfTokenPattern, indexCode)
-        if len(csrfValue) >= 1:
-            csrfValue = csrfValue[0]
-        data = {
-            'user[login]' : username,
-            'user[password]' : password,
-            'user[dymatice_code]' : 'unknown',
-            'commit' : '登录 Login'
-        }
-        data[csrfParam] = csrfValue
-        login = self.__req.post(vpnUrl, data = data, headers = self.header)
-        searchLoginStatus = '<li><a rel="nofollow" data-method="delete" href="/users/sign_out">退出登录</a></li>'
-        if searchLoginStatus in login.text:
-            self.useVpn = True
-            return True
-        else:
-            return False
+        # if self.useVpn:
+        #     return True
+        # vpnUrl = 'https://w.buct.edu.cn/users/sign_in'
+        # indexBack = self.__req.get(vpnUrl, headers = self.header)
+        # indexCode = indexBack.text
+        # csrfParamPattern = '<meta name="csrf-param" content="(.*?)" />'
+        # csrfParam = re.findall(csrfParamPattern, indexCode)
+        # if len(csrfParam) >= 1:
+        #     csrfParam = csrfParam[0]
+        # csrfTokenPattern = '<meta name="csrf-token" content="(.*?)" />'
+        # csrfValue = re.findall(csrfTokenPattern, indexCode)
+        # if len(csrfValue) >= 1:
+        #     csrfValue = csrfValue[0]
+        # data = {
+        #     'user[login]' : username,
+        #     'user[password]' : password,
+        #     'user[dymatice_code]' : 'unknown',
+        #     'commit' : '登录 Login'
+        # }
+        # data[csrfParam] = csrfValue
+        # login = self.__req.post(vpnUrl, data = data, headers = self.header)
+        # searchLoginStatus = '<li><a rel="nofollow" data-method="delete" href="/users/sign_out">退出登录</a></li>'
+        # if searchLoginStatus in login.text:
+        #     self.useVpn = True
+        #     return True
+        # else:
+        #     return False
 
 
     #得到成绩信息
@@ -384,6 +384,66 @@ class Robot(object):
         #print(info)
         return info     
 
+
+    def getSpaceClassroom(self, xnm, xqm, weekNum, day, classNum, campusId = 2, buildingId = '', className = ''):
+        '''
+        @param xqm 学年ID
+        @param xnm 学期ID
+        @param weekNum 周次
+        @param day 星期几
+        @param classNum 节次
+        @param campusId 校区ID 默认为2, 代表北区，东区ID是1， 西区是3
+        @param buildingId 场地ID 
+        @param className 场地名称筛选
+        '''
+        if not self.__isLogin:
+            return
+        xqm = int(xqm)
+        xnm = int(xnm)
+        weekNum = int(weekNum)
+        day = int(day)
+        classNum = int(classNum)
+        campusId = int(campusId)
+
+        xqm = [3, 12, 16][int(xqm) - 1]
+        # 处理星期数据
+        xqj = ''
+        import math
+        num = 1
+        while day:
+            if day % 2:
+                xqj += str(num)
+            day = math.floor(day / 2)
+            if day:
+                xqj += ','
+            num += 1
+        apiUrl = '/jwglxt/cdjy/cdjy_cxKxcdlb.html?doType=query&gnmkdm=N2155'
+        data = {
+            'xqm' : xqm,
+            'xnm' : xnm,
+            'fwzt' : 'cx',
+            'xqh_id' : campusId,
+            'cdlb_id' : '',
+            'cdejlb_id' : '',
+            'qszws' : '',
+            'jszws' : '',
+            'cdmc' : className,
+            'lh' : buildingId,
+            'jyfs' : '',
+            'cdjylx' : '',
+            'zcd' : weekNum,
+            'xqj' : xqj,
+            'jcd' : classNum,
+            '_search' : False,
+            'nd' : self.nowTime,
+            'queryModel.showCount': 10000,
+            'queryModel.currentPage' : 1,
+            'queryModel.sortName' : 'cdbh',
+            'queryModel.sortOrder': 'asc',
+        }
+        rep = self.__req.post(self.baseUrl + apiUrl, data= data, headers=self.header)
+        rep = json.loads(rep.text)
+        return rep
+
 if __name__ == "__main__":
     None
-

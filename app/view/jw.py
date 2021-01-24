@@ -199,6 +199,7 @@ def getTestInfo():
         res['info'] = 'VPN用户名或者密码错误'
         return json.dumps(res)
     robot.login()
+    
     if not robot.isLogin():
         res['info'] = '用户名或者密码错误'
         return json.dumps(res)
@@ -208,3 +209,36 @@ def getTestInfo():
     res['info'] = 'success'
     res['status'] = True
     return json.dumps(res)
+
+@jwBlueprint.route('/getSpaceClassInfo', methods= ['POST'])
+def getSpaceClassInfo():
+    res = {
+        'status' : False,
+        'info' : '',
+        'data' : None
+    }
+
+    userName = request.form.get('username')
+    passWord = request.form.get('password')
+    xnm = request.form.get('xnm')
+    xqm = request.form.get('xqm')
+    weekNum = request.form.get('weekNum') 
+    day = request.form.get('day')
+    classNum = request.form.get('classNum')
+    className = request.form.get('className')
+    if not userName or not passWord or not xnm or not xqm or not weekNum or not day or not classNum:
+        res['info'] = '缺少参数'
+        return json.dumps(res)
+
+    robot = Robot('https://jwglxt-proxy2.buct.edu.cn', userName, passWord)
+    robot.login()
+    if not robot.isLogin():
+        res['info'] = '用户名或者密码错误'
+        return json.dumps(res)
+
+    data = robot.getSpaceClassroom(xnm, xqm, weekNum, day, classNum, className=className)
+    res['data'] = data
+    res['info'] = 'success'
+    res['status'] = True
+    return json.dumps(res)
+
