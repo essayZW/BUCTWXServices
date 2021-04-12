@@ -2,6 +2,8 @@
 
 为参加BUCT小程序比赛的后端项目
 
+前端代码仓库：https://github.com/essayZW/BUCTWXServicesFront
+
 # 注意事项
 
 1. 开发时需要修改`app/config.py`中的`debug`为`True`,这样可以开启Flask的Debug模式，并且忽略接口需要的Token安全验证
