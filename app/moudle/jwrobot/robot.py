@@ -68,7 +68,8 @@ class Robot(object):
             'csrftoken' : self.csrfToken
         }
         rep = self.__req.post(self.baseUrl + '/jwglxt/xtgl/login_slogin.html', data = data, headers = self.header)
-        if rep.url == self.baseUrl + '/jwglxt/xtgl/index_initMenu.html':
+        if str(rep.url).startswith(self.baseUrl + '/jwglxt/xtgl/index_initMenu.html'):
+        # if rep.url == self.baseUrl + '/jwglxt/xtgl/index_initMenu.html':
             self.__isLogin = True
             self.__indexCode = rep.text
             if __name__ == '__main__':
